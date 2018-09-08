@@ -1,0 +1,41 @@
+/*
+* Advanced weighting script X
+* Wraith - Game extraction tools
+*/
+
+global proc WraithMesh_b5cef9d3_00_BindFunc()
+{
+   select -r WraithMesh_b5cef9d3_00;
+   select -add bone0;
+   select -add bone2;
+   select -add bone3;
+   select -add bone1;
+   newSkinCluster "-toSelectedBones -mi 30 -omi true -dr 5.0 -rui false";   string $clu = findRelatedSkinCluster("WraithMesh_b5cef9d3_00");
+
+   skinPercent -tv bone0 1.0 $clu WraithMesh_b5cef9d3_00.vtx[0:7] WraithMesh_b5cef9d3_00.vtx[9:10];
+   skinPercent -tv bone1 1.0 $clu WraithMesh_b5cef9d3_00.vtx[8];
+   skinPercent -tv bone2 0.500000 $clu WraithMesh_b5cef9d3_00.vtx[5] WraithMesh_b5cef9d3_00.vtx[7];
+   skinPercent -tv bone3 0.100000 $clu WraithMesh_b5cef9d3_00.vtx[7];
+}
+
+global proc RunAdvancedScript()
+{
+   catch(WraithMesh_b5cef9d3_00_BindFunc());
+}
+
+global proc NamespacePurge()
+{
+   string $allNodes[] = `ls`;
+   for($node in $allNodes) {
+      string $buffer[];
+      tokenize $node ":" $buffer;
+      string $newName = $buffer[size($buffer)-1];
+       catchQuiet(`rename $node $newName`);
+   }
+}
+
+print("Currently binding the current model, please wait...\n");
+NamespacePurge();
+RunAdvancedScript();
+print("The model has been binded.\n");
+
